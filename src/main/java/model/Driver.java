@@ -1,23 +1,25 @@
-package Model;
+package model;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Random;
+
+@Getter
+@NoArgsConstructor
+@ToString
 
 @Entity
 @Table(name = "driver")
 @NamedQueries({@NamedQuery(name = "Driver.deleteAllDrivers", query = "DELETE FROM Driver d")})
 public class Driver {
 
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int Id;
+    @Column(name = "id", nullable = false, unique = true)
+    private String Id;
 
     @Column(name = "first_name", length = 50, nullable = false)
     private String firstName;
@@ -27,7 +29,7 @@ public class Driver {
 
     @Setter(AccessLevel.NONE)
     @Column(name = "employment_date", nullable = false)
-    private int employmentDate;
+    private LocalDateTime employmentDate;
 
     @Column(name = "salary")
     private BigDecimal salary;
@@ -66,6 +68,20 @@ public class Driver {
         driverId += '-';
         driverId += new Random().nextInt(899)+100;
 */
+
+    }
+
+    public Boolean validateDriverId(String driverId) {
+        return driverId.matches("[0-9][0-9][0-9][0-9][0-9][0-9]-[A-Z][A-Z]-[0-9][0-9][0-9][A-Z]");
+
+    }
+
+    @PrePersist
+    private void onPrePersist() {
+
+        employmentDate = LocalDateTime.now();
+        Id = generateID();
+
 
     }
 }

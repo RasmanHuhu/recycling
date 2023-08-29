@@ -1,6 +1,6 @@
 package dao;
 
-import Model.Driver;
+import model.Driver;
 
 import java.math.BigDecimal;
 import java.util.List;

@@ -1,7 +1,7 @@
 package dao;
 
-import Model.Driver;
-import Model.WasteTruck;
+import model.Driver;
+import model.WasteTruck;
 
 import java.util.List;
 
