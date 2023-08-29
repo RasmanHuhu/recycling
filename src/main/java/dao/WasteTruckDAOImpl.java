@@ -23,6 +23,7 @@ public class WasteTruckDAOImpl implements IWasteTruckDAO {
 
     @Override
     public int saveWasteTruck(String brand, String registrationNumber, int capacity) {
+
         return 0;
     }
 

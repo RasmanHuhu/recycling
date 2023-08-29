@@ -74,37 +74,55 @@ public class DriverDAOImpl implements IDriverDAO {
         }
     }
 
+    //SELECT * FROM driver WHERE EXTRACT(YEAR FROM employment_date) = 2023;
     @Override
-    public List<Driver> findAllDriversEmployedAtTheSameYear(String year) {
+    public List<Driver> findAllDriversEmployedAtTheSameYear(int year) {
 
         try (var em = emf.createEntityManager()) {
-            TypedQuery<Driver> query = em.createQuery("", Driver.class);
+            TypedQuery<Driver> query = em.createQuery("SELECT d FROM Driver d WHERE EXTRACT(YEAR FROM d.employmentDate) = :year ", Driver.class);
+            query.setParameter("year", year);
+            return query.getResultList();
         }
-       return null;
     }
 
     @Override
-    public List<BigDecimal> fetchAllDriversWithSalaryGreaterThan10000() {
-        return null;
+    public List<Driver> fetchAllDriversWithSalaryGreaterThan10000() {
+        try (var em = emf.createEntityManager()) {
+            TypedQuery<Driver> query = em.createQuery("SELECT d FROM Driver d WHERE d.salary > 10000 ", Driver.class);
+            return query.getResultList();
+        }
     }
 
     @Override
-    public double fetchHighestSalary() {
-        return 0;
+    public BigDecimal fetchHighestSalary() {
+        try (var em = emf.createEntityManager()) {
+            TypedQuery<BigDecimal> query = em.createQuery("SELECT d.salary FROM Driver d ORDER by d.salary DESC LIMIT 1", BigDecimal.class);
+            return query.getSingleResult();
+        }
+        //SELECT * FROM driver ORDER BY salary DESC LIMIT 1;
     }
 
     @Override
     public List<String> fetchFirstNameOfAllDrivers() {
-        return null;
+        try (var em = emf.createEntityManager()) {
+            TypedQuery<String> query = em.createQuery("SELECT d.firstName FROM Driver d", String.class);
+            return query.getResultList();
+        }
     }
 
     @Override
-    public long calculateNumberOfDrivers() {
-        return 0;
+    public Integer calculateNumberOfDrivers() {
+        try (var em = emf.createEntityManager()) {
+            TypedQuery<Integer> query = em.createQuery("SELECT COUNT(d) FROM Driver d", Integer.class);
+            return query.getSingleResult();
+        }
     }
 
     @Override
     public Driver fetchDriverWithHighestSalary() {
-        return null;
+        try (var em = emf.createEntityManager()) {
+            TypedQuery<Driver> query = em.createQuery("SELECT d FROM Driver d ORDER by d.salary DESC LIMIT 1", Driver.class);
+            return query.getSingleResult();
+        }
     }
 }
